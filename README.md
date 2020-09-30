@@ -1,15 +1,18 @@
 # Intrinsic Functions
 
-**YAML**
-Fn::Base64: valueToEncode
 
-**Short Form**
-!Base64 valueToEncode
 
-**JSON**
-{ "Fn::Base64" : valueToEncode }
+Used to send encoded data, usually user data
 
-**Example**
+```yaml
 Fn::Base64: AWS CloudFormation
+```
 
 
+### FindInMap
+
+The intrinsic function Fn::FindInMap returns the value corresponding to keys in a two-level map that is declared in the Mappings section. 
+
+```yaml
+Fn::FindInMap: [ MapName, TopLevelKey, SecondLevelKey ]
+```
