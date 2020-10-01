@@ -119,9 +119,9 @@ Fn::ImportValue:
 Appends a set of values into a single value, separated by the specified delimiter. If a delimiter is the empty string, the set of values are concatenated with no delimiter. 
 
 ```yaml
-!Join [ ":", [ a, b, c ] ]
+!Join [ " ", [ a, b, c ] ]
 ```
-returns: "a:b:c"
+returns: "a b c"
 
 ```yaml
 !Join
@@ -154,12 +154,47 @@ Split a string into a list of string values so that you can select an element fr
 !Split [ "|" , "a|b|c" ]
 ```
 
+```yaml
+!Select [2, !Split [",", !ImportValue AccountSubnetIDs]]
+```
+
+
+###Sub
+
+Substitutes variables in an input string with values that you specify. In your templates, you can use this function to construct commands or outputs that include values that aren't available until you create or update a stack.
+
+```yaml
+!Sub 'arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:vpc/${vpc}'
+```
+
+
+###Transform
+
+Specifies a macro to perform custom processing on part of a stack template. Macros enable you to perform custom processing on templates, from simple actions like find-and-replace operations to extensive transformations of entire templates
+
+```yaml
+'Fn::Transform':
+    Name: 'AWS::Include'
+    Parameters: {Location: {'Fn::FindInMap': [RegionMap, us-east-1, s3Location]}}
+```
+
+
+```yaml
+The following example calls the AWS::Include transform, specifying that the location to retrieve a template snippet from is located in the RegionMap mapping, under the key us-east-1 and nested key s3Location.
+```
 
 
 
+###Ref
 
+Returns the value of the specified parameter or resource. 
 
-
+```yaml
+MyEIP:
+  Type: "AWS::EC2::EIP"
+  Properties:
+    InstanceId: !Ref MyEC2Instance
+```
 
 
 
