@@ -198,4 +198,90 @@ MyEIP:
 
 
 
+##Pseudo parameters
+
+Pseudo parameters are parameters that are predefined by AWS CloudFormation. You do not declare them in your template. Use them the same way as you would a parameter, as the argument for the Ref function.
+
+
+###AWS::Region
+
+```yaml
+Outputs:
+  MyStacksRegion:
+    Value: !Ref "AWS::Region"
+```
+
+###AWS::AccountId
+
+###AWS::NoValue
+
+###AWS::Partition
+
+Returns the partition that the resource is in. For standard AWS regions, the partition is aws. For resources in other partitions, the partition is aws-partitionname. For example, the partition for resources in the China (Beijing and Ningxia) region is aws-cn and the partition for resources in the AWS GovCloud (US-West) region is aws-us-gov. 
+
+###AWS::StackId
+
+###AWS::StackName
+
+###AWS::URLSuffix
+
+Returns the suffix for a domain. The suffix is typically amazonaws.com, but might differ by region. For example, the suffix for the China (Beijing) region is amazonaws.com.cn.
+
+
+##Condition Functions
+
+Condition functions are intrinsic functions
+
+AWSTemplateFormatVersion: "2010-09-09"
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      AMI: "ami-0ff8a91507f77f867"
+    us-west-1:
+      AMI: "ami-0bdb828fd58c52235"
+    us-west-2:
+      AMI: "ami-a0cfeed8"
+    eu-west-1:
+      AMI: "ami-047bb4163c506cd98"
+    sa-east-1:
+      AMI: "ami-07b14488da8ea02a0"
+    ap-southeast-1:
+      AMI: "ami-08569b978cc4dfa10"
+    ap-southeast-2:
+      AMI: "ami-09b42976632b27e9b"
+    ap-northeast-1:
+      AMI: "ami-06cd52961ce9f0d85"
+
+Parameters:
+  EnvType:
+    Description: Environment type.
+    Default: test
+    Type: String
+    AllowedValues: [prod, dev, test]
+    ConstraintDescription: must specify prod, dev, or test.
+
+Conditions:
+  CreateProdResources: !Equals [!Ref EnvType, prod]
+  CreateDevResources: !Equals [!Ref EnvType, "dev"]
+
+Resources:
+  EC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMI]
+      InstanceType: !If [CreateProdResources, c1.xlarge, !If [CreateDevResources, m1.large, m1.small]]
+  MountPoint:
+    Type: "AWS::EC2::VolumeAttachment"
+    Condition: CreateProdResources
+    Properties:
+      InstanceId: !Ref EC2Instance
+      VolumeId: !Ref NewVolume
+      Device: /dev/sdh
+  NewVolume:
+    Type: "AWS::EC2::Volume"
+    Condition: CreateProdResources
+    Properties:
+      Size: 100
+      AvailabilityZone: !GetAtt EC2Instance.AvailabilityZone
 
