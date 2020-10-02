@@ -2,7 +2,7 @@
 
 
 
-###Base64
+### Base64
 
 Returns the Base64 representation of the input string. This function is typically used to pass encoded data to Amazon EC2 instances by way of the UserData property. 
 
@@ -22,7 +22,7 @@ UserData:
 ```
 
 
-### FindInMap
+###  FindInMap
 
 The intrinsic function Fn::FindInMap returns the value corresponding to keys in a two-level map that is declared in the Mappings section. 
 
@@ -60,7 +60,7 @@ Resources:
 ```
 
 
-###Cidr
+### Cidr
 
 Returns an array of CIDR address blocks. The number of CIDR blocks returned is dependent on the count parameter. 
 
@@ -73,7 +73,7 @@ Fn::Cidr:
 
 
 
-###GetAtt
+### GetAtt
 
 Returns the value of an attribute from a resource in the template.  Limited to what is available per resource, each resource definition had details of what is available.
 
@@ -86,7 +86,7 @@ Fn::GetAtt: [ logicalNameOfResource, attributeName ]
 ```
 
 
-###GetAZs
+### GetAZs
 
 Returns an array that lists Availability Zones for a specified region in alaphabetical order.
 
@@ -104,7 +104,7 @@ AvailabilityZone: !Select
 ```
 
 
-###ImportValue
+### ImportValue
 
 Returns the value of an output exported by another stack. You typically use this function to create cross-stack references. You can't use the short form of !ImportValue when it contains a !Sub. 
 
@@ -114,7 +114,7 @@ Fn::ImportValue:
 ```
 
 
-###Join
+### Join
 
 Appends a set of values into a single value, separated by the specified delimiter. If a delimiter is the empty string, the set of values are concatenated with no delimiter. 
 
@@ -133,7 +133,7 @@ returns: "a b c"
 ```
 
 
-###Select
+### Select
 
 Returns a single object from a list of objects by index. 
 
@@ -146,7 +146,7 @@ Subnet0:
 ```
 
 
-###Split
+### Split
 
 Split a string into a list of string values so that you can select an element from the resulting string list.  Use !Select to pick one.
 
@@ -159,7 +159,7 @@ Split a string into a list of string values so that you can select an element fr
 ```
 
 
-###Sub
+### Sub
 
 Substitutes variables in an input string with values that you specify. In your templates, you can use this function to construct commands or outputs that include values that aren't available until you create or update a stack.
 
@@ -168,7 +168,7 @@ Substitutes variables in an input string with values that you specify. In your t
 ```
 
 
-###Transform
+### Transform
 
 Specifies a macro to perform custom processing on part of a stack template. Macros enable you to perform custom processing on templates, from simple actions like find-and-replace operations to extensive transformations of entire templates
 
@@ -185,7 +185,7 @@ The following example calls the AWS::Include transform, specifying that the loca
 
 
 
-###Ref
+### Ref
 
 Returns the value of the specified parameter or resource. 
 
@@ -203,7 +203,7 @@ MyEIP:
 Pseudo parameters are parameters that are predefined by AWS CloudFormation. You do not declare them in your template. Use them the same way as you would a parameter, as the argument for the Ref function.
 
 
-###AWS::Region
+### AWS::Region
 
 ```yaml
 Outputs:
@@ -211,19 +211,19 @@ Outputs:
     Value: !Ref "AWS::Region"
 ```
 
-###AWS::AccountId
+### AWS::AccountId
 
-###AWS::NoValue
+### AWS::NoValue
 
-###AWS::Partition
+### AWS::Partition
 
 Returns the partition that the resource is in. For standard AWS regions, the partition is aws. For resources in other partitions, the partition is aws-partitionname. For example, the partition for resources in the China (Beijing and Ningxia) region is aws-cn and the partition for resources in the AWS GovCloud (US-West) region is aws-us-gov. 
 
-###AWS::StackId
+### AWS::StackId
 
-###AWS::StackName
+### AWS::StackName
 
-###AWS::URLSuffix
+### AWS::URLSuffix
 
 Returns the suffix for a domain. The suffix is typically amazonaws.com, but might differ by region. For example, the suffix for the China (Beijing) region is amazonaws.com.cn.
 
@@ -288,7 +288,7 @@ Resources:
 ```yaml
 
 
-###Best Practices
+### Best Practices
 
 - Reuse Templates to Replicate Stacks in Multiple Environments.
 - Nested Stacks can also used as a means to reuse common template patterns.
