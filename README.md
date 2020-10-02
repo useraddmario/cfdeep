@@ -285,3 +285,17 @@ Resources:
       Size: 100
       AvailabilityZone: !GetAtt EC2Instance.AvailabilityZone
 
+###Best Practices
+
+- Reuse Templates to Replicate Stacks in Multiple Environments.
+- Nested Stacks can also used as a means to reuse common template patterns.
+- Do not imbed credentials in your templates.
+- Use input parameters to pass in information
+  -  For additional security, you can use the NoEcho property to obfuscate the parameter value.
+- Use Parameter Constraints - Don't allow your users to enter invalid parameter values
+- Validate templates before using them
+  - can use CloudFormation Designer to validate
+  - can help you catch syntax and some semantic errors, such as circular dependencies
+- VCS - This is code, so use best practices
+  - code reviews
+  - revision controls
