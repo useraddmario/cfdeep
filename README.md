@@ -198,7 +198,7 @@ MyEIP:
 
 
 
-##Pseudo parameters
+### Pseudo parameters
 
 Pseudo parameters are parameters that are predefined by AWS CloudFormation. You do not declare them in your template. Use them the same way as you would a parameter, as the argument for the Ref function.
 
@@ -228,7 +228,7 @@ Returns the partition that the resource is in. For standard AWS regions, the par
 Returns the suffix for a domain. The suffix is typically amazonaws.com, but might differ by region. For example, the suffix for the China (Beijing) region is amazonaws.com.cn.
 
 
-##Condition Functions
+### Condition Functions
 
 Condition functions are intrinsic functions
 
