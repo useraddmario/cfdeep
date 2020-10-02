@@ -232,6 +232,7 @@ Returns the suffix for a domain. The suffix is typically amazonaws.com, but migh
 
 Condition functions are intrinsic functions
 
+```yaml
 AWSTemplateFormatVersion: "2010-09-09"
 
 Mappings:
@@ -284,6 +285,8 @@ Resources:
     Properties:
       Size: 100
       AvailabilityZone: !GetAtt EC2Instance.AvailabilityZone
+```yaml
+
 
 ###Best Practices
 
