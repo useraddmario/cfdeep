@@ -285,7 +285,7 @@ Resources:
     Properties:
       Size: 100
       AvailabilityZone: !GetAtt EC2Instance.AvailabilityZone
-```yaml
+```
 
 
 ### Best Practices
