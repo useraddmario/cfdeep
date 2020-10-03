@@ -178,13 +178,6 @@ Specifies a macro to perform custom processing on part of a stack template. Macr
     Parameters: {Location: {'Fn::FindInMap': [RegionMap, us-east-1, s3Location]}}
 ```
 
-
-```yaml
-The following example calls the AWS::Include transform, specifying that the location to retrieve a template snippet from is located in the RegionMap mapping, under the key us-east-1 and nested key s3Location.
-```
-
-
-
 ### Ref
 
 Returns the value of the specified parameter or resource. 
@@ -302,3 +295,17 @@ Resources:
 - VCS - This is code, so use best practices
   - code reviews
   - revision controls
+
+
+
+
+
+
+
+
+
+
+
+
+
+
