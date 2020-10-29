@@ -1,0 +1,134 @@
+Description: >
+    Mario Rodriguez - AWS study
+
+Parameters:
+
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+  
+  LatestAmiId:
+    Description: Region specific image from the Parameter Store
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+
+Resources:
+
+  OtherEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  JumpSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow ssh to jumphost
+      VpcId:
+        Fn::ImportValue:
+          !Sub "${EnvironmentName}-VPCID"
+      SecurityGroupIngress:
+      - IpProtocol: tcp 
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: tcp 
+        FromPort: 0
+        ToPort: 65535
+        CidrIp: 0.0.0.0/0
+
+  JumpEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  JumpRole: 
+    Type: "AWS::IAM::Role"
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      Path: "/"
+  JumpRolePolicy: 
+    Type: "AWS::IAM::Policy"
+    Properties: 
+      PolicyName: "JumpPolicy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Action:
+              - ec2:DescribeAddresses
+              - ec2:AllocateAddress
+              - ec2:DescribeInstances
+              - ec2:AssociateAddress
+              - autoscaling:DescribeAutoScalingGroups
+              - cloudformation:Describe* 
+            Resource: "*"
+      Roles: 
+        - 
+          Ref: "JumpRole"
+  JumpInstanceProfile: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Path: "/"
+      Roles: 
+        - 
+          Ref: "JumpRole"
+
+  JumpLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      UserData:
+        Fn::Base64:
+          Fn::Sub: |
+            #!/bin/bash
+            /usr/bin/curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            /usr/bin/unzip awscliv2.zip
+            ./aws/install
+            yum install -y python3-pip python3 python3-setuptools git
+            pip3 install boto3
+            cat > /etc/profile.d/load_env.sh << 'EOF'
+
+            export AWS_DEFAULT_REGION=${AWS::Region}
+
+            EOF
+            /usr/bin/curl https://raw.githubusercontent.com/useraddmario/eip-boto3-attach/main/lifecycle.py --output lifecycle.py
+            /usr/bin/chmod u+x lifecycle.py
+            /usr/bin/python3 lifecycle.py
+      ImageId: !Ref LatestAmiId
+      KeyName: that-one
+      IamInstanceProfile: !Ref JumpInstanceProfile
+      SecurityGroups:
+      - Ref: JumpSecGroup
+      InstanceType: t2.nano
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sdk"
+        Ebs:
+          VolumeSize: 10
+
+  JumpGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier:
+      - Fn::ImportValue: 
+          !Sub "${EnvironmentName}-PUB-SN"
+      LaunchConfigurationName:
+        Ref: JumpLaunchConfig
+      MinSize: '0'
+      MaxSize: '2'
+      DesiredCapacity: '1'
+
+Outputs:
+    JumpGroup:
+        Description: Jump AutoScaling Group
+        Value: !Ref JumpGroup
+        Export:
+          Name: !Sub ${EnvironmentName}-JumpInfo

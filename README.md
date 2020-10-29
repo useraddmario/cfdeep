@@ -297,7 +297,9 @@ Resources:
   - revision controls
 
 
+### Drift
 
+stack actions dd > detect drift > view drift results > view drift details
 
 
 

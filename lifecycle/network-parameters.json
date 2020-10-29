@@ -1,0 +1,14 @@
+[
+	{
+		"ParameterKey": "EnvironmentName",
+		"ParameterValue": "AWSLearn"
+	},
+	{
+		"ParameterKey": "VpcCIDR",
+		"ParameterValue": "10.1.0.0/16"
+	},
+	{
+		"ParameterKey": "PublicSubnet1CIDR",
+		"ParameterValue": "10.1.0.0/24"
+	}
+]
